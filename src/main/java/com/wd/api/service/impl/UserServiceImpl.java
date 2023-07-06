@@ -6,6 +6,7 @@ import com.wd.api.exception.domain.EmailExistException;
 import com.wd.api.exception.domain.UserNotFoundException;
 import com.wd.api.exception.domain.UsernameExistException;
 import com.wd.api.repository.UserRepository;
+import com.wd.api.service.LoginAttemptService;
 import com.wd.api.service.UserService;
 import com.wd.api.constant.UserImplConstant;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -24,6 +25,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import static com.wd.api.enumeration.Role.*;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
@@ -35,11 +37,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private Logger LOGGER = LoggerFactory.getLogger(getClass());
     private UserRepository userRepository;
     private BCryptPasswordEncoder passwordEncoder;
-
+   private LoginAttemptService loginAttemptService;
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, LoginAttemptService loginAttemptService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.loginAttemptService = loginAttemptService;
     }
 
     @Override
@@ -49,6 +52,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             LOGGER.error(UserImplConstant.NO_USER_FOUND_BY_USERNAME + username);
             throw new UsernameNotFoundException(UserImplConstant.NO_USER_FOUND_BY_USERNAME + username);
         } else {
+            validateLoginAttempt(user);
             user.setLastLoginDateDisplay(user.getLastLoginDate());
             user.setLastLoginDate(new Date());
             userRepository.save(user);
@@ -58,13 +62,25 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
     }
 
+    private void validateLoginAttempt(User user)  {
+        if (user.isNotLocked()){
+            if (loginAttemptService.hasExceededMaxAttempts(user.getUsername())){
+                user.setNotLocked(false);
+            }else{
+                user.setNotLocked(true);
+            }
+        }else{
+            loginAttemptService.evicUserFromLogingAttemptCache(user.getUsername());
+        }
+    }
+
     @Override
     public User register(String firstName, String lastName, String username, String email) throws UserNotFoundException, UsernameExistException, EmailExistException {
         validateNewUsernameAndEmail(EMPTY, username, email);
         User user = new User();
         user.setUserId(generateUserId());
         String password = generatePassword();
-        String encodedPassword = encodePassword(password);
+        String encodedPassword = encodePassword("123");
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setUsername(username);
