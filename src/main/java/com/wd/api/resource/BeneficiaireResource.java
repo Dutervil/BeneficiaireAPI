@@ -19,7 +19,6 @@ public class BeneficiaireResource {
     private final BeneficiaireService beneficiaireService;
 
 
-
     public BeneficiaireResource(BeneficiaireService beneficiaireService) {
         this.beneficiaireService = beneficiaireService;
     }
