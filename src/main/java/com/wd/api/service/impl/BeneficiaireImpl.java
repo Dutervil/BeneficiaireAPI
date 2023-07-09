@@ -21,7 +21,7 @@ public class BeneficiaireImpl implements BeneficiaireService {
 
     @Override
     public Beneficiaire save(Beneficiaire beneficiaire) {
-        beneficiaire.setImageUrl(getTemporaryProfileImageUrl());
+//        beneficiaire.setImageUrl(getTemporaryProfileImageUrl());
         return this.beneficiaireRepository.save(beneficiaire);
     }
 
@@ -32,7 +32,7 @@ public class BeneficiaireImpl implements BeneficiaireService {
 
     @Override
     public Beneficiaire update(Beneficiaire beneficiaire) {
-        beneficiaire.setImageUrl(getTemporaryProfileImageUrl());
+//        beneficiaire.setImageUrl("getTemporaryProfileImageUrl"());
         return this.beneficiaireRepository.save(beneficiaire);
     }
 
@@ -46,7 +46,7 @@ public class BeneficiaireImpl implements BeneficiaireService {
         this.beneficiaireRepository.deleteById(id);
     }
 
-    private String getTemporaryProfileImageUrl() {
-        return ServletUriComponentsBuilder.fromCurrentContextPath().path(UserImplConstant.DEFAULT_BENEFICIAIRE_IMAGE_PATH).toUriString();
-    }
+//    private String getTemporaryProfileImageUrl() {
+//        return ServletUriComponentsBuilder.fromCurrentContextPath().path(UserImplConstant.DEFAULT_BENEFICIAIRE_IMAGE_PATH).toUriString();
+//    }
 }

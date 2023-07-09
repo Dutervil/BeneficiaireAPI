@@ -13,12 +13,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
+
+import java.io.IOException;
 
 import static com.wd.api.constant.SecurityConstant.JWT_TOKEN_HEADER;
 import static org.springframework.http.HttpStatus.OK;
@@ -52,6 +52,53 @@ public class UserResource extends ExceptionHandling {
         return new ResponseEntity<>(newUser, OK);
     }
 
+    @PostMapping("/add")
+    public ResponseEntity<User>addNewUser(
+            @RequestParam("firstName") String firstName,
+            @RequestParam("lastName") String lastName,
+            @RequestParam("username") String username,
+            @RequestParam("email") String email,
+            @RequestParam("role") String role,
+            @RequestParam("isActive") String isActive,
+            @RequestParam("isNonLocked") String isNonLocked,
+            @RequestParam(value = "profileImage",required = false) MultipartFile profileImage) throws UserNotFoundException, EmailExistException, IOException, UsernameExistException {
+    User newUser=userService.addNewUser(
+            firstName,
+            lastName,
+            username,
+            email,
+            role,
+            Boolean.parseBoolean(isNonLocked),
+            Boolean.parseBoolean(isActive),
+            profileImage
+            );
+    return new ResponseEntity<>(newUser,OK);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<User>updateUser(
+            @RequestParam("currentUsername") String curremtUsername,
+            @RequestParam("firstName") String firstName,
+            @RequestParam("lastName") String lastName,
+            @RequestParam("username") String username,
+            @RequestParam("email") String email,
+            @RequestParam("role") String role,
+            @RequestParam("isActive") String isActive,
+            @RequestParam("isNonLocked") String isNonLocked,
+            @RequestParam(value = "profileImage",required = false) MultipartFile profileImage) throws UserNotFoundException, EmailExistException, IOException, UsernameExistException {
+        User updateUser=userService.updateNewUser(
+                curremtUsername,
+                firstName,
+                lastName,
+                username,
+                email,
+                role,
+                Boolean.parseBoolean(isNonLocked),
+                Boolean.parseBoolean(isActive),
+                profileImage
+        );
+        return new ResponseEntity<>(updateUser,OK);
+    }
     private HttpHeaders getJwtHeader(UserPrincipal user) {
         HttpHeaders headers = new HttpHeaders();
         headers.add(JWT_TOKEN_HEADER, jwtTokenProvider.generateJwtToken(user));
@@ -61,4 +108,6 @@ public class UserResource extends ExceptionHandling {
     private void authenticate(String username, String password) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
     }
+
+
 }
