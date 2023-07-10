@@ -15,6 +15,7 @@ public class Beneficiaire {
     private String code;
     private String nom;
     private String prenom;
+    private String sexe;
     private Date dateNaissance;
     private String adresse;
     private String niveauEtude;
@@ -25,6 +26,7 @@ public class Beneficiaire {
     private Date dateIntegration;
     private String commentaire;
     private String type;
+    private String status ;// Actif, Inactif
     @OneToMany(cascade = CascadeType.ALL)
     private List<Dossier> dossierList;
 
