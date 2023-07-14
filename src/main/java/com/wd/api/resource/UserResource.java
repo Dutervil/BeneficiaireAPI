@@ -29,7 +29,9 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.wd.api.constant.FileConstant.*;
 import static com.wd.api.constant.SecurityConstant.JWT_TOKEN_HEADER;
@@ -40,6 +42,7 @@ import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
 
 @RestController
 @RequestMapping(path = { "/", "/user"})
+@CrossOrigin("*")
 public class UserResource extends ExceptionHandling {
     public static final String EMAIL_SENT = "An email with a new password sent to ";
     public static final String USER_DELETED_SUCCESSFULLY = "User deleted successfully";
@@ -55,12 +58,17 @@ public class UserResource extends ExceptionHandling {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody User user) {
+    public ResponseEntity<?> login(@RequestBody User user) {
         authenticate(user.getUsername(), user.getPassword());
         User loginUser = userService.findUserByUsername(user.getUsername());
         UserPrincipal userPrincipal = new UserPrincipal(loginUser);
+        String token =jwtTokenProvider.generateJwtToken(userPrincipal);
+//        LoginResponse response=new LoginResponse(token,loginUser);
+        Map<String,Object> response=new HashMap<>();
+        response.put("token",token);
+        response.put("user",loginUser);
         HttpHeaders jwtHeader = getJwtHeader(userPrincipal);
-        return new ResponseEntity<>(loginUser, jwtHeader, OK);
+        return new ResponseEntity<>(response, jwtHeader, OK);
     }
 
     @PostMapping("/register")
@@ -117,9 +125,9 @@ public class UserResource extends ExceptionHandling {
         return new ResponseEntity<>(updateUser,OK);
     }
 
-    @GetMapping("/find/{username}")
-    public ResponseEntity<User> getUser(@PathVariable("username") String username){
-        return new ResponseEntity<>(userService.findUserByUsername(username),OK);
+    @GetMapping("/find/{id}")
+    public ResponseEntity<User> getUser(@PathVariable("id") Long id){
+        return new ResponseEntity<>(userService.findById(id),OK);
     }
 
     @GetMapping("/resetPassword/{email}")
@@ -166,7 +174,7 @@ public class UserResource extends ExceptionHandling {
     }
 
 
-    @GetMapping("/{list}")
+    @GetMapping("/list")
     public ResponseEntity<List<User>> getUsers(){
         return new ResponseEntity<>(userService.getUsers(),OK);
     }
@@ -181,4 +189,12 @@ public class UserResource extends ExceptionHandling {
     }
 
 
+    class LoginResponse{
+        String token;
+        User user;
+        LoginResponse(String token,User user){
+            this.user=user;
+            this.token=token;
+        }
+    }
 }

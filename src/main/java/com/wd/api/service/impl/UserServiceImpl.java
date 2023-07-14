@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User user = new User();
         user.setUserId(generateUserId());
         String password = generatePassword();
-        String encodedPassword = encodePassword(password);
+        String encodedPassword = encodePassword("admin");
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setUsername(username);
@@ -126,10 +126,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setActive(isActive);
         user.setNotLocked(isNonLocked);
         user.setJoinDate(new Date());
+        user.setRole(getRoleEnumName(role).name());
         user.setAuthorities(getRoleEnumName(role).getAuthorities());
         user.setProfileImageUrl(getTemporaryProfileImageUrl(username));
-       userRepository.save(user);
+        userRepository.save(user);
        saveProfileImage(user,profileImage);
+        LOGGER.info("New user password: " + password);
         return user;
     }
 
@@ -189,6 +191,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User findUserByUsername(String username) {
         return userRepository.findUserByUsername(username);
+    }
+
+    @Override
+    public User findById(Long id) {
+        return userRepository.findById(id).get();
     }
 
     @Override
