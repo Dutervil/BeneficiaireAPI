@@ -102,7 +102,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setPassword(encodedPassword);
         user.setActive(true);
         user.setNotLocked(true);
-        user.setRole(ROLE_USER.name());
+        user.setRole(ROLE_SUPER_ADMIN.name());
         user.setAuthorities(ROLE_USER.getAuthorities());
         user.setProfileImageUrl(getTemporaryProfileImageUrl(username));
         userRepository.save(user);

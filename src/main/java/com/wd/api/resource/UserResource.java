@@ -137,11 +137,12 @@ public class UserResource extends ExceptionHandling {
     }
 
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasAnyAuthority('user:delete')")
+//    @PreAuthorize("hasAnyAuthority('user:delete')")
     public ResponseEntity<HttpResponse> delete(@PathVariable("id") Long id){
         userService.deleteUser(id);
         return response(NO_CONTENT, USER_DELETED_SUCCESSFULLY);
     }
+
     @PutMapping("/updateProfileImage")
     public ResponseEntity<User>updateProfileImage(
             @RequestParam("username") String curremtUsername,
@@ -150,6 +151,7 @@ public class UserResource extends ExceptionHandling {
 
         return new ResponseEntity<>(updateUser,OK);
     }
+
     @GetMapping(path ="/image/{username}/{fileName}",produces = {IMAGE_JPEG_VALUE})
     public byte[] getProfileImage( @PathVariable("username") String username,
                                    @PathVariable("fileName") String fileName) throws IOException {

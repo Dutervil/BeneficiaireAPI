@@ -118,7 +118,7 @@ public class BeneficiaireResource {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('beneficiare:delete,beneficiare:read')")
+//    @PreAuthorize("hasAnyAuthority('beneficiare:delete,beneficiare:read')")
     public ResponseEntity<?> delete(@PathVariable("id") Long id){
         try{
         this.beneficiaireService.deleteById(id);
@@ -131,7 +131,6 @@ public class BeneficiaireResource {
 
 
    @GetMapping
-   @PreAuthorize("hasAnyAuthority('beneficiare:read')")
     public ResponseEntity<?> list(){
         try{
          return new ResponseEntity<>(this.beneficiaireService.getAll(),HttpStatus.OK);
@@ -140,6 +139,7 @@ public class BeneficiaireResource {
         }
         return ResponseEntity.ok(Map.of(MESSAGE,SOMETHING_WENT_WRONG));
     }
+
 
 
     @PutMapping("/updateProfileImage")
@@ -151,8 +151,8 @@ public class BeneficiaireResource {
         return new ResponseEntity<>(beneficiaire,OK);
     }
 
+
     @GetMapping(path ="/image/{nom}/{fileName}",produces = {IMAGE_JPEG_VALUE})
-    @PreAuthorize("hasAnyAuthority('beneficiare:read')")
     public byte[] getProfileImage( @PathVariable("nom") String nom,
                                    @PathVariable("fileName") String fileName) throws IOException {
         return Files.readAllBytes(Paths.get(BMS_FOLDER+nom+FORWARD_SLASH+fileName));
