@@ -126,8 +126,8 @@ public class UserResource extends ExceptionHandling {
     }
 
     @GetMapping("/find/{id}")
-    public ResponseEntity<User> getUser(@PathVariable("id") Long id){
-        return new ResponseEntity<>(userService.findById(id),OK);
+    public ResponseEntity<User> getUser(@PathVariable("id") String username){
+        return new ResponseEntity<>(userService.findUserByUsername(username),OK);
     }
 
     @GetMapping("/resetPassword/{email}")
