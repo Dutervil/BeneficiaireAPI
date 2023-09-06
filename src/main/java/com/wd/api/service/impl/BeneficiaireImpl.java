@@ -32,7 +32,11 @@ public class BeneficiaireImpl implements BeneficiaireService {
 
 
     @Override
-    public Beneficiaire addBeneficiare(String code, String nom, String prenom, String sexe, String dateNaissance, String adresse, String niveauEtude, String telephone, String nomPersonneReponse, String phonePersonneResponsable, String type,String status, String dateIntegration, String commentaire, MultipartFile profileImage) throws IOException {
+    public Beneficiaire addBeneficiare(String code, String nom, String prenom, String sexe, String dateNaissance, String adresse, String niveauEtude, String telephone, String nomPersonneReponse, String phonePersonneResponsable, String type,String status, String dateIntegration, String commentaire,
+                                       String numeroCompte,
+                                       String moncashNumber,
+                                       String groupe,
+                                       MultipartFile profileImage) throws IOException {
         Beneficiaire beneficiaire=new Beneficiaire();
         beneficiaire.setNom(nom);
         beneficiaire.setPrenom(prenom);
@@ -48,6 +52,9 @@ public class BeneficiaireImpl implements BeneficiaireService {
         beneficiaire.setPhonePersonneResponsable(phonePersonneResponsable);
         beneficiaire.setTelephone(telephone);
         beneficiaire.setType(type);
+        beneficiaire.setNumeroCompte(numeroCompte);
+        beneficiaire.setMoncashNumber(moncashNumber);
+        beneficiaire.setGroupe(groupe);
         beneficiaire.setImageUrl(getTemporaryProfileImageUrl(beneficiaire));
         beneficiaireRepository.save(beneficiaire);
         saveProfileImage(beneficiaire,profileImage);
@@ -56,7 +63,11 @@ public class BeneficiaireImpl implements BeneficiaireService {
     }
 
     @Override
-    public Beneficiaire updateBeneficiare(Long id, String code, String nom, String prenom, String sexe, String dateNaissance, String adresse, String niveauEtude, String telephone, String nomPersonneReponse, String phonePersonneResponsable, String type,String status, String dateIntegration, String commentaire, MultipartFile profileImage) throws IOException {
+    public Beneficiaire updateBeneficiare(Long id, String code, String nom, String prenom, String sexe, String dateNaissance, String adresse, String niveauEtude, String telephone, String nomPersonneReponse, String phonePersonneResponsable, String type,String status, String dateIntegration, String commentaire,
+                                          String numeroCompte,
+                                          String moncashNumber,
+                                          String groupe,
+                                          MultipartFile profileImage) throws IOException {
         Beneficiaire beneficiaire=new Beneficiaire();
         beneficiaire.setId(id);
         beneficiaire.setNom(nom);
@@ -73,6 +84,9 @@ public class BeneficiaireImpl implements BeneficiaireService {
         beneficiaire.setPhonePersonneResponsable(phonePersonneResponsable);
         beneficiaire.setTelephone(telephone);
         beneficiaire.setType(type);
+        beneficiaire.setNumeroCompte(numeroCompte);
+        beneficiaire.setMoncashNumber(moncashNumber);
+        beneficiaire.setGroupe(groupe);
         beneficiaire.setImageUrl(getTemporaryProfileImageUrl(beneficiaire));
         beneficiaireRepository.save(beneficiaire);
         saveProfileImage(beneficiaire,profileImage);

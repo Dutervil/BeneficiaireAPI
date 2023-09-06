@@ -30,6 +30,9 @@ public interface BeneficiaireService {
                         String status,
                         String dateIntegration,
                         String commentaire,
+                                String numeroCompte,
+                                String moncashNumber,
+                                String groupe,
                         MultipartFile profileImage) throws IOException;
 
     Beneficiaire updateBeneficiare(
@@ -46,8 +49,11 @@ public interface BeneficiaireService {
                         String phonePersonneResponsable,
                         String type,
                         String status,
-                        String dateIntegration,
+                        String  dateIntegration,
                         String commentaire,
+                        String numeroCompte,
+                        String moncashNumber,
+                        String groupe,
                         MultipartFile profileImage) throws IOException;
 
     Beneficiaire getById(Long id);

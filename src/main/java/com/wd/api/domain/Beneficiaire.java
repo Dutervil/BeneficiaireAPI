@@ -31,7 +31,9 @@ public class Beneficiaire {
     private String commentaire;
     private String type;
     private String status ;// Actif, Inactif
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Dossier> dossierList;
+    private String numeroCompte;
+    private String moncashNumber;
+    private String groupe;
+
 
 }

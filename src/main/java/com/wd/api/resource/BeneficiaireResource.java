@@ -58,12 +58,15 @@ public class BeneficiaireResource {
             @RequestParam("type") String type,
             @RequestParam("commentaire") String commentaire,
             @RequestParam("status") String status,
+            @RequestParam("numeroCompte") String numeroCompte,
+            @RequestParam("numeroMoncash") String numeroMoncash,
+            @RequestParam("groupe") String groupe,
             @RequestParam(value = "profileImage",required = false) MultipartFile profileImage) throws IOException{
         try{
             Beneficiaire beneficiaire=this.beneficiaireService.addBeneficiare(
                     code,nom,prenom,sexe,dateNaissance,adresse,niveauEtude,
                     telephone,nomPersonneReponse,phonePersonneResponsable,type,
-                    status,dateIntegration,commentaire,profileImage
+                    status,dateIntegration,commentaire,numeroCompte,numeroMoncash,groupe,profileImage
             );
         return  new ResponseEntity<>(beneficiaire, HttpStatus.OK);
 
@@ -90,6 +93,10 @@ public class BeneficiaireResource {
             @RequestParam("type") String type,
             @RequestParam("commentaire") String commentaire,
             @RequestParam("status") String status,
+
+            @RequestParam("numeroCompte") String numeroCompte,
+            @RequestParam("numeroMoncash") String numeroMoncash,
+            @RequestParam("groupe") String groupe,
             @RequestParam(value = "profileImage",required = false) MultipartFile profileImage
     ){
         try{
@@ -97,7 +104,7 @@ public class BeneficiaireResource {
                     Long.parseLong(id),
                     code,nom,prenom,sexe,dateNaissance,adresse,niveauEtude,
                     telephone,nomPersonneReponse,phonePersonneResponsable,type,
-                    status,dateIntegration,commentaire,profileImage
+                    status,dateIntegration,commentaire,numeroCompte,numeroMoncash,groupe,profileImage
             );
             return  new ResponseEntity<>(beneficiaire, HttpStatus.OK);
 

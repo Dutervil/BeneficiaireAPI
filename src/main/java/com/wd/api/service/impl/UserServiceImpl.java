@@ -114,7 +114,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User addNewUser(String firstName, String lastName, String username,String email, String role, boolean isNonLocked, boolean isActive, MultipartFile profileImage) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException {
        validateNewUsernameAndEmail(EMPTY,username,email);
-        String password = generatePassword();
+        String password = "admin";
         User user = new User();
         user.setUserId(generateUserId());
         user.setUserId(generateUserId());
