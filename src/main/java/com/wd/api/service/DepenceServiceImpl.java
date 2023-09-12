@@ -75,4 +75,6 @@ public class DepenceServiceImpl implements DepenceService{
     public List<Depence> list() {
         return this.depenceRepository.findAll();
     }
+
+
 }

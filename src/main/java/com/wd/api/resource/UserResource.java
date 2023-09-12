@@ -125,14 +125,16 @@ public class UserResource extends ExceptionHandling {
         return new ResponseEntity<>(updateUser,OK);
     }
 
-    @GetMapping("/find/{id}")
-    public ResponseEntity<User> getUser(@PathVariable("id") String username){
+    @GetMapping("/find/{username}")
+    public ResponseEntity<User> getUser(@PathVariable("username") String username){
         return new ResponseEntity<>(userService.findUserByUsername(username),OK);
     }
 
-    @GetMapping("/resetPassword/{email}")
+
+
+    @GetMapping("/resetPassword/{username}")
     public ResponseEntity<HttpResponse> resetPassword(@PathVariable("email") String emai) throws EmailNotFoundException, MessagingException {
-       userService.resetPassword(emai);
+        userService.resetPassword(emai);
         return response(OK, EMAIL_SENT  +emai);
     }
 

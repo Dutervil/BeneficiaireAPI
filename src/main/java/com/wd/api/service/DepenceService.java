@@ -12,4 +12,5 @@ public interface DepenceService {
     List<Depence> findByBeneficiareId(Long id);
     void delete(Long id);
     List<Depence> list();
+
 }
