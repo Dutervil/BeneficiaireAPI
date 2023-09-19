@@ -13,8 +13,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import static com.wd.api.constant.FileConstant.*;
 import static com.wd.api.constant.FileConstant.JPG_EXTENTION;
@@ -116,10 +116,9 @@ public class BeneficiaireImpl implements BeneficiaireService {
         return beneficiaire;
     }
 
-
-
-
-
+    /**
+     * @return
+     */
 
 
     private void saveProfileImage(Beneficiaire beneficiaire, MultipartFile profileImage) throws IOException {
@@ -147,6 +146,11 @@ public class BeneficiaireImpl implements BeneficiaireService {
 
     private String getTemporaryProfileImageUrl(Beneficiaire beneficiaire) {
         return ServletUriComponentsBuilder.fromCurrentContextPath().path(DEFAULT_BENEFICIAIRE_IMAGE_PATH +  beneficiaire.getNom()).toUriString();
+    }
+
+    @Override
+    public Map<Integer, String> getAmountByStatus() {
+        return (Map<Integer, String>) this.beneficiaireRepository.getAmountByStatus();
     }
 
 }

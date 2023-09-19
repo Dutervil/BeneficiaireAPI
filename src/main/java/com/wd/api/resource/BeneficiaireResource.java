@@ -181,4 +181,14 @@ public class BeneficiaireResource {
     private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String message) {
         return new ResponseEntity<>(new HttpResponse(httpStatus.value(),httpStatus,httpStatus.getReasonPhrase().toUpperCase(),message.toUpperCase()),httpStatus);
     }
+
+    @GetMapping("/status/statistic")
+    public ResponseEntity<?> getStatusInfo(){
+        try{
+            return new ResponseEntity<>(this.beneficiaireService.getAmountByStatus(),HttpStatus.OK);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok(Map.of(MESSAGE,SOMETHING_WENT_WRONG));
+    }
 }
