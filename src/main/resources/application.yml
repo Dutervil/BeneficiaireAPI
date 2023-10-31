@@ -11,7 +11,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/BMS
     username: root
-    password:
+    password: letmein@@
   jpa:
     show-sql: true
     hibernate:

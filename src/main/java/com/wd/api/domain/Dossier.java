@@ -12,13 +12,13 @@ import javax.persistence.*;
 @Entity @Data @AllArgsConstructor @NoArgsConstructor
 public class Dossier {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false,updatable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String title;
+    private String userId;
+    @Lob
+    private byte[] fileData;
 
-    private String docFileUrl;
-    private String titre;
-    private String description;
 
 
 
