@@ -27,7 +27,7 @@ public class DossierResource {
         try {
             Dossier document = new Dossier();
             document.setFileData(file.getBytes());
-            document.setUserId(userId);
+            document.setUserId(Long.parseLong(userId));
             document.setTitle(title);
             dossierRepository.save(document);
             return ResponseEntity.ok("Document uploaded successfully!");
@@ -36,8 +36,18 @@ public class DossierResource {
         }
     }
 
-    @GetMapping("/get/{userId}")
-    public ResponseEntity<?> get(@PathVariable("userId") Long userId) {
+    @GetMapping("/get/{id}")
+    public ResponseEntity<?> get(@PathVariable("id") Long userId) {
+        try {
+
+            return ResponseEntity.ok(dossierRepository.findByUserId(userId));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload the document.");
+        }
+    }
+
+    @GetMapping()
+    public ResponseEntity<?> getAll() {
         try {
 
             return ResponseEntity.ok(dossierRepository.findAll());
@@ -45,4 +55,15 @@ public class DossierResource {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload the document.");
         }
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
+        try {
+            dossierRepository.deleteById(id);
+            return ResponseEntity.ok("Dossier supprime");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload the document.");
+        }
+    }
+
 }

@@ -15,7 +15,7 @@ public class Dossier {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-    private String userId;
+    private Long userId;
     @Lob
     private byte[] fileData;
 

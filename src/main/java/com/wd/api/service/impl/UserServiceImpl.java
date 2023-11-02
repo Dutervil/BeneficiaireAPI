@@ -1,5 +1,6 @@
 package com.wd.api.service.impl;
 
+import com.wd.api.EmailUtils;
 import com.wd.api.domain.User;
 import com.wd.api.domain.UserPrincipal;
 import com.wd.api.enumeration.Role;
@@ -16,7 +17,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -49,13 +49,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private UserRepository userRepository;
     private BCryptPasswordEncoder passwordEncoder;
    private LoginAttemptService loginAttemptService;
-   private  EmailService emailService;
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, LoginAttemptService loginAttemptService, EmailService emailService) {
+
+    private final EmailUtils emailUtils;
+
+    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, LoginAttemptService loginAttemptService, EmailService emailService, EmailUtils emailUtils) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.loginAttemptService = loginAttemptService;
-        this.emailService = emailService;
+
+        this.emailUtils = emailUtils;
     }
 
     @Override
@@ -107,14 +109,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setProfileImageUrl(getTemporaryProfileImageUrl(username));
         userRepository.save(user);
         LOGGER.info("New user password: " + password);
-        emailService.sendNewPasswordEmail(firstName,password,email);
+        emailUtils.confirmationEmail(email,password);
         return user;
     }
 
     @Override
-    public User addNewUser(String firstName, String lastName, String username,String email, String role, boolean isNonLocked, boolean isActive, MultipartFile profileImage) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException {
+    public User addNewUser(String firstName, String lastName, String username,String email, String role, boolean isNonLocked, boolean isActive, MultipartFile profileImage) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, MessagingException {
        validateNewUsernameAndEmail(EMPTY,username,email);
-        String password = "admin";
+//        String password = "admin";
+        String password = generatePassword();
         User user = new User();
         user.setUserId(generateUserId());
         user.setUserId(generateUserId());
@@ -130,15 +133,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setAuthorities(getRoleEnumName(role).getAuthorities());
         user.setProfileImageUrl(getTemporaryProfileImageUrl(username));
         userRepository.save(user);
-       saveProfileImage(user,profileImage);
+        saveProfileImage(user,profileImage);
+//        TODO: Send generated password to use
         LOGGER.info("New user password: " + password);
+        emailUtils.confirmationEmail(email,password);
         return user;
     }
 
 
 
     @Override
-    public User updateNewUser(String currentUsername, String newFirstName, String newLastName,String newUsername, String newEmail, String role, boolean isNonLocked, boolean isActive, MultipartFile profileImage) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException {
+    public User updateNewUser(Long id,String currentUsername, String newFirstName, String newLastName,String newUsername, String newEmail, String role, boolean isNonLocked, boolean isActive, MultipartFile profileImage) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException {
         validateNewUsernameAndEmail(currentUsername,newUsername,newEmail);
         String password = generatePassword();
         User currentUser = new User();
@@ -150,9 +155,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         currentUser.setActive(isActive);
         currentUser.setNotLocked(isNonLocked);
         currentUser.setJoinDate(new Date());
-        currentUser.setUsername(currentUsername);
         currentUser.setAuthorities(getRoleEnumName(role).getAuthorities());
         currentUser.setRole(getRoleEnumName(role).name());
+        currentUser.setId(id);
         userRepository.save(currentUser);
         saveProfileImage(currentUser,profileImage);
         return currentUser;
@@ -173,7 +178,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
      String password=generatePassword();
      user.setPassword(encodePassword(password));
      userRepository.save(user);
-     emailService.sendNewPasswordEmail(user.getFirstName(),password,user.getEmail());
+//     emailService.sendNewPasswordEmail(user.getFirstName(),password,user.getEmail());
     }
 
     @Override

@@ -79,6 +79,7 @@ public class UserResource extends ExceptionHandling {
 
     @PostMapping("/add")
     public ResponseEntity<User>addNewUser(
+
             @RequestParam("firstName") String firstName,
             @RequestParam("lastName") String lastName,
             @RequestParam("username") String username,
@@ -86,7 +87,7 @@ public class UserResource extends ExceptionHandling {
             @RequestParam("role") String role,
             @RequestParam("isActive") String isActive,
             @RequestParam("isNonLocked") String isNonLocked,
-            @RequestParam(value = "profileImage",required = false) MultipartFile profileImage) throws UserNotFoundException, EmailExistException, IOException, UsernameExistException {
+            @RequestParam(value = "profileImage",required = false) MultipartFile profileImage) throws UserNotFoundException, EmailExistException, IOException, UsernameExistException, MessagingException {
     User newUser=userService.addNewUser(
             firstName,
             lastName,
@@ -102,6 +103,7 @@ public class UserResource extends ExceptionHandling {
 
     @PutMapping("/update")
     public ResponseEntity<User>updateUser(
+            @RequestParam("id") String id,
             @RequestParam("currentUsername") String currentUsername,
             @RequestParam("firstName") String firstName,
             @RequestParam("lastName") String lastName,
@@ -112,6 +114,7 @@ public class UserResource extends ExceptionHandling {
             @RequestParam("isNonLocked") String isNonLocked,
             @RequestParam(value = "profileImage",required = false) MultipartFile profileImage) throws UserNotFoundException, EmailExistException, IOException, UsernameExistException {
         User updateUser=userService.updateNewUser(
+                Long.parseLong(id),
                 currentUsername,
                 firstName,
                 lastName,
@@ -129,6 +132,12 @@ public class UserResource extends ExceptionHandling {
     public ResponseEntity<User> getUser(@PathVariable("username") String username){
         return new ResponseEntity<>(userService.findUserByUsername(username),OK);
     }
+
+    @GetMapping("/find/unique/{id}")
+    public ResponseEntity<User> findById(@PathVariable("id") Long id){
+        return new ResponseEntity<>(userService.findById(id),OK);
+    }
+
 
 
 
