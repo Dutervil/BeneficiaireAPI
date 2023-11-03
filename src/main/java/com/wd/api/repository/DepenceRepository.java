@@ -14,6 +14,12 @@ public interface DepenceRepository extends JpaRepository<Depence,Long> {
     @Query("SELECT sum (d.montant) AS qty, d.typeDepence AS typeDepence FROM Depence d GROUP BY d.typeDepence")
     List<Object[]> getCountByTypeDepence();
 
-    @Query("SELECT SUM(d.montant) FROM Depence d")
+    @Query("SELECT SUM(d.montant) FROM Depence d ")
     Long getTotalCount();
+
+    @Query("SELECT SUM(d.montant) FROM Depence d where d.uniteMonetaire ='HTG'")
+    Long getTotalCountHTG();
+
+    @Query("SELECT SUM(d.montant) FROM Depence d where d.uniteMonetaire ='USD'")
+    Long getTotalCountUSD();
 }

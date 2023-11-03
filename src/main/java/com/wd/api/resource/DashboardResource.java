@@ -42,4 +42,15 @@ public class DashboardResource {
         }
         return ResponseEntity.ok(Map.of(MESSAGE,SOMETHING_WENT_WRONG));
     }
+
+    @GetMapping()
+    public ResponseEntity<?> getByCurrencyType(){
+
+        try{
+            return new ResponseEntity<>(this.dashboardService.getSumByCurrency(), HttpStatus.OK);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok(Map.of(MESSAGE,SOMETHING_WENT_WRONG));
+    }
 }

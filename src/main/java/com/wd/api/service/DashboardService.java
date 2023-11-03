@@ -10,4 +10,6 @@ public interface DashboardService {
 
     public List<Object[]> getCountByTypeDepence() ;
     public Map<String,Long> getMapCount();
+
+    Map<String,Long> getSumByCurrency();
 }

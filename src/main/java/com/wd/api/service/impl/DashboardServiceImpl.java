@@ -42,4 +42,15 @@ public class DashboardServiceImpl implements DashboardService {
         data.put("beneficiaire",this.beneficiaireRepository.getTotalCount());
         return data;
     }
+
+    /**
+     * @return
+     */
+    @Override
+    public Map<String, Long> getSumByCurrency() {
+        Map<String,Long> data=new HashMap<>();
+        data.put("USD",this.depenceRepository.getTotalCountUSD());
+        data.put("HTG",this.depenceRepository.getTotalCountHTG());
+        return data;
+    }
 }

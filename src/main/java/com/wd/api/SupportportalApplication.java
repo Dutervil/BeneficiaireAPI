@@ -29,18 +29,18 @@ public class SupportportalApplication {
 	}
 
 
-	@PostConstruct
-	public void createAdminUser(){
-		User user=new User();
-		user.setFirstName("Peterson");
-		user.setLastName("Pierre");
-		user.setUsername("admin");
-		user.setPassword(passwordEncoder.encode("admin"));
-		user.setRole("SUPER_ADMIN");
-		user.setActive(true);
-		user.setNotLocked(true);
-		this.userRepository.save(user);
-	}
+//	@PostConstruct
+//	public void createAdminUser(){
+//		User user=new User();
+//		user.setFirstName("Peterson");
+//		user.setLastName("Pierre");
+//		user.setUsername("admin");
+//		user.setPassword(passwordEncoder.encode("admin"));
+//		user.setRole("SUPER_ADMIN");
+//		user.setActive(true);
+//		user.setNotLocked(true);
+//		this.userRepository.save(user);
+//	}
 
 
 	@Bean
