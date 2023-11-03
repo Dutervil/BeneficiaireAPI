@@ -86,7 +86,7 @@ public class UserResource extends ExceptionHandling {
             @RequestParam("email") String email,
             @RequestParam("role") String role,
             @RequestParam("isActive") String isActive,
-            @RequestParam("isNonLocked") String isNonLocked,
+            @RequestParam("isNotLocked") String isNonLocke,
             @RequestParam(value = "profileImage",required = false) MultipartFile profileImage) throws UserNotFoundException, EmailExistException, IOException, UsernameExistException, MessagingException {
     User newUser=userService.addNewUser(
             firstName,
@@ -94,7 +94,7 @@ public class UserResource extends ExceptionHandling {
             username,
             email,
             role,
-            Boolean.parseBoolean(isNonLocked),
+            Boolean.parseBoolean(isNonLocke),
             Boolean.parseBoolean(isActive),
             profileImage
             );
@@ -111,7 +111,7 @@ public class UserResource extends ExceptionHandling {
             @RequestParam("email") String email,
             @RequestParam("role") String role,
             @RequestParam("isActive") String isActive,
-            @RequestParam("isNonLocked") String isNonLocked,
+            @RequestParam("isNotLocked") String isNonLocked,
             @RequestParam(value = "profileImage",required = false) MultipartFile profileImage) throws UserNotFoundException, EmailExistException, IOException, UsernameExistException {
         User updateUser=userService.updateNewUser(
                 Long.parseLong(id),
@@ -125,6 +125,8 @@ public class UserResource extends ExceptionHandling {
                 Boolean.parseBoolean(isActive),
                 profileImage
         );
+        System.out.println("STATUS "+isActive);
+        System.out.println("isNonLocked "+isNonLocked);
         return new ResponseEntity<>(updateUser,OK);
     }
 

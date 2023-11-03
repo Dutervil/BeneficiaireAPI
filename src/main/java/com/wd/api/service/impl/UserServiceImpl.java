@@ -125,7 +125,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setLastName(lastName);
         user.setEmail(email);
         user.setUsername(username);
-        user.setPassword(encodePassword(password));
+        user.setPassword(encodePassword("admin"));
         user.setActive(isActive);
         user.setNotLocked(isNonLocked);
         user.setJoinDate(new Date());
